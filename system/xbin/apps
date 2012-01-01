@@ -1,0 +1,65 @@
+#!/system/bin/sh
+
+# backup/restore apps
+# Print usage 
+
+if [ "$1" = "" ];
+then
+	echo 'Usage: apps [-bk] [-rs]'
+	echo ''
+	echo 'Options:'
+	echo '		-bk	backs up apps to sdcard'
+	echo '		-rs	restores apps to phone'
+	echo 'Notes:'
+	echo '		usb mass storage must be off'
+fi
+
+# Backup apps 
+
+if [ "$1" = "-bk" ];
+then
+	if [ -e /sdcard/backups/apps ]; 
+	then
+		echo "Please wait for backup to complete..."
+ 		cp /data/app/*.apk /sdcard/backups/apps > /dev/null
+		cp /data/app-private/*.apk /sdcard/backups/apps > /dev/null
+		echo "Apps have been backed up"
+		date=`date`
+		echo "Applications backup: Success" $date > /sdcard/backups/apps/backup.txt
+	else
+		echo "Please wait for backup to complete..."
+		mkdir /sdcard/backups
+		mkdir /sdcard/backups/apps
+		cp /data/app/*.apk /sdcard/backups/apps > /dev/null
+		cp /data/app-private/*.apk /sdcard/backups/apps > /dev/null
+		echo "Apps have been backed up"
+		date=`date`
+		echo "Applications backup: Success" $date > /sdcard/backups/apps/backup.txt
+	fi
+	echo ""
+fi
+
+# Restore apps 
+
+if [ "$1" = "-rs" ];
+then
+	echo "Please wait for restore to complete..."
+	if [ -e /sdcard/appsbackup.tgz ]; 
+	then
+		tar zxvf /sdcard/appsbackup.tgz -C / > /dev/null
+		chmod 644 /data/app/*
+		chmod 644 /data/app-private/*
+	fi
+	if [ -e /sdcard/backups/apps ]
+	then
+		cp /sdcard/backups/apps/*.apk /data/app
+		chmod 644 /data/app/*.apk
+	fi
+	if [ -e /sdcard/SimplyStunning/apps ]
+	then
+		cp /sdcard/SimplyStunning/apps/*.apk /data/app
+		chmod 644 /data/app/*.apk
+	fi
+	echo "Apps have been restored"
+	echo "Reboot to complete restoration"
+fi

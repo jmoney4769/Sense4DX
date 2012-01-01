@@ -1,0 +1,10 @@
+#!/system/bin/sh
+# 
+
+busybox mount -o rw,remount /system
+busybox cp -R /sdcard/backups/extras/* /system/app/
+busybox cp -R /sdcard/backups/local/* /data/local/
+busybox cp -R /sdcard/backups/fonts/* /system/fonts/
+busybox mount -o ro,remount /system
+sync
+

@@ -1,0 +1,1273 @@
+//2011.08.07	(nick).Kingdom IOtbale.
+//2011.08.11	(nick).RUE test. //B13, L- R- +6dB for KIM.
+//2011.08.12	(nick).modify A21,A22,B21,B22 for FM. need check level on 8/15.
+//2011.08.17	(nick).modify A21 FM-HP level 152mV, and B12 increase 5dB for 512mV HP playback.
+//2011.08.18	(nick).modify B13 to sync ETY, and modify B14 to make it is same with B14.
+//2011.08.23	(nick).modify B group, check all downlink path router. ITS#816.
+//									.modify B14 to make HP_ringer = SPK_ringer.
+//2011.08.24	(nick).modify B12 to 51 C0.
+//2011.08.26	(nick).modify A19, A20. AB23-26 for TTY. A03 for nomicHeadset phone.
+//2011.08.31	(nick).modify A02 for ibeats sidetone.
+//2011.09.01	(nick).modify A41 for stereo camcorder, main mic left position.
+Uplink Path  
+A00,Initial  
+w 30 00 00                                                                                                                                                        
+w 30 01 01  //SW reset.                                                                                                                                         
+w 30 00 01                                                                                                                                                      
+w 30 01 00  //enable weak connection                                                                                                               
+w 30 02 21  //enable analog block and set AVDD LDO to 1.77V and internal ALDO                                                                                   
+w 30 7B 01  //0x7b=123, set reference power-up time:in 40ms for fast charging time in Ref external cap.                                                    
+w 30 00 00  //setting for I2S and clock settings                                                                                                                
+w 30 06 04  //* J=4.                                                                                                                                            
+w 30 05 12  //* P=1, R=2.                                                                                                                       
+w 30 04 03  //PLL_CLKIN = MCLK; CODEC_CLKIN = PLL_CLK.                                                                                                          
+w 30 07 00  //* reg07, 3254 default value                                                                                                                       
+w 30 08 00  //* reg08, 3254 default value                                                                                                                       
+w 30 05 92  //* PLL power up.                                                                                                                                   
+w 30 0B 82  //* NDAC up, NDAC=2.                                                                                                                                
+w 30 0C 88  //* MDAC up, MDAC=8. 48k Fs                                                                                                                        
+w 30 12 82  //* NADC up, NADC=2.                                                                                                                                
+w 30 13 88  //* MADC up, MADC=8. 48k Fs                                                                                                                        
+w 30 00 01  //Set up downlink path connection                                                                                                                   
+w 30 0A 3B  //Both Line and HP Powered by LDOIN, output CM setting is set to 1.65V            //?¢G??n?}LINE OUT                                                
+w 30 0C 08  //Connect LDAC to HPL                                                                                                                               
+w 30 0D 08  //Connect RDAC to HPR                                                                                                                               
+w 30 0E 08  //Connect LDAC to LOL                                                                                                                               
+w 30 0F 08  //Connect RDAC to LOR                                                                                                                               
+w 30 10 00  //HPL unmute, HPL drive gain is 0dB                                                                                                                 
+w 30 11 00  //HPR unmute, HPR drive gain is 0dB                                                                                                                 
+w 30 12 00  //LOL unmute, LOL drive gain is 0dB                                                                                                                 
+w 30 13 00  //LOR unmute, LOR drive gain is 0dB                                                                                                                 
+w 30 00 00  //unmute DA and AD                                                                                                                                  
+w 30 40 00  //DAC channel unmute and L/R Channel have independent Volume control                                                                                
+w 30 52 00  //ADC channel unmute and L/R ADC Channel Fine Gain = 0dB  trying to match the gain between channels                                                 
+w 30 1B 00  //* 0x1B=27, For slave setting,set the Bit, Frame as an output source. Audio interface is I2S, 16bits,BitCLK and WodCLK are input from MSM8255.     
+w 30 1D 00  //* reg29, 3254 default value                                                                                                                       
+w 30 1E 00  //* 0x1E=30, For slave setting, power down BCLK.                                                                                                    
+
+A01,Call_Uplink_IMIC_Receiver  
+w 30 00 01		//Page-1; Set the input connection			                                 
+w 30 34 20		//REG-52; IN2L is routed to LMICPGA+ with 20K                                            
+w 30 36 20		//REG-54; IN2R is routed to LMICPGA- with 20K                                            
+w 30 37 00    //REG-55; Disconnect                                                                                        
+w 30 39 00    //REG-57; Disconnect                                                                                       
+w 30 3B 3C		//REG-59; Left MICPGA enable; Vol=30dB, ADIE=4.5dB                                                           
+w 30 3C 3C		//REG-60; Right MICPGA enable; Vol=30dB, ADIE=4.5dB                                                          
+w 30 00 00    //Page-0                                                                                                                                                                                 
+w 30 51 C0		//REG-81; Power up L-ADC, R-ADC,                                                                                                                                                        
+w 30 52 00 		//REG-82; L-ADC, R-ADC unmute                                                                                                                                                            
+w 30 53 00		//REG-83; L-ADC_gain=0dB                                                                                                                                                         
+w 30 54 00		//REG-84; R-ADC_gain=0dB                                                                                                                                                         
+w 30 00 01    //Page-1; Set the Output connection                                                                                                                                                                                
+w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only   
+w 30 0D 10    //REG-13; L-DACM routed to HPR !!                                                          
+w 30 12 00		//REG-18; LOL_Gain=0dB                                                                                                                                                           
+w 30 13 00		//REG-19; LOR_Gain=0dB                                                                                                                                                           
+w 30 00 00    //Page-0                                                                                                                                                                                 
+w 30 40 00		//REG-64; DAC unmute                                                                                                                                                            
+w 30 41 00		//REG-65, L-DAC_gain=0dB                                                                                                                                                  
+w 30 42 00		//REG-66, R-DAC_gain=0dB                                                                                                                                                  
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                                   
+
+
+A02,Call_Uplink_EMIC_Headphone  
+w 30 00 01		//Page-1; Set the input connection		                                  
+w 30 34 00		//REG-52; Disconnect                                            
+w 30 36 00		//REG-54; Disconnect                                            
+w 30 37 C0    //REG-55; IN1_L-->R-MicPGA- with 40k                                                                                            
+w 30 39 30    //REG-57; IN1_R-->R-MicPGA+ with 40k                                                                                            
+w 30 3B 26		//REG-59; Left MicPGA enable; Vol=19dB                                                          
+w 30 3C 26		//REG-60; Right MicPGA enable; Vol=19dB                                                       
+w 30 00 00    //Page-0                                                                                           
+w 30 51 C0		//REG-81; Power up L-ADC, R-ADC,                                                                
+w 30 52 00 		//REG-82; L-ADC, R-ADC unmute?                                                                     
+w 30 53 00		//REG-83; L-ADC_gain=0dB                                                                
+w 30 54 00		//REG-84; R-ADC_gain=0dB                                                                 
+w 30 00 01    //page-1                                                                                                                                                                                 
+w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only   
+w 30 0D 10    //REG-13; L-DACM routed to HPR !!                                                                                                                       
+w 30 12 08		//REG-18; LOL_Gain=8dB                                                                                                                                                      
+w 30 13 08		//REG-19; LOR_Gain=8dB                                                                                                                                              
+w 30 00 00    //page-0                                                                                                                                                                                 
+w 30 40 00		//REG-64; DAC unmute                                                                                                                                                       
+w 30 41 00		//REG-65, L-DAC_gain=0dB                                                                                                                                               
+w 30 42 00		//REG-66, R-DAC_gain=0dB                                                                                                                                              
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                               
+w 30 00 01		//*0831 add for beats sidetone.
+w 30 09 35		//*0831 add for beats sidetone. Turn on MAR amp.
+w 30 0D 12		//*0831 add for beats sidetone. MAR&LDAC_M route to HPR.
+w 30 0C 09		//*0831 add for beats sidetone. MAR&LDAC_P route to HPL.
+
+A03,Call_Uplink_IMIC_Headphone  
+w 30 00 01		//Page-1; Set the input connection			                                 
+w 30 34 00		//REG-52; Disconnect                                        
+w 30 36 00		//REG-54; Disconnect                                          
+w 30 37 02    //REG-55; IN2L -> RMICPGA(P)
+w 30 39 80    //REG-57; CM1R -> RMICPGA(M)
+w 30 3B 32		//REG-59; Left MICPGA enable; Vol=25dB                                                         
+w 30 3C 32		//REG-60; Right MICPGA enable; Vol=25dB                                                       
+w 30 00 00    //Page-0                                                                                                                                                                                 
+w 30 51 C0		//REG-81; Power up L-ADC, R-ADC,                                                                                                                                                      
+w 30 52 00 		//REG-82; L-ADC, R-ADC unmute                                                                                                                                                           
+w 30 53 00		//REG-83; L-ADC_gain=0dB                                                                                                                                                         
+w 30 54 00		//REG-84; R-ADC_gain=0dB                                                                                                                                                         
+w 30 00 01    //Page-1;                                                                                                                                                                                 
+w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only 
+w 30 0D 10    //REG-13; L-DACM routed to HPR !!                                                                                                                                
+w 30 12 00		//REG-18; LOL_Gain=0dB                                                                                                                                                          
+w 30 13 00		//REG-19; LOR_Gain=0dB                                                                                                                                                           
+w 30 00 00    //page-0                                                                                                                                                                                  
+w 30 40 00		//REG-64; DAC unmute                                                                                                                                                          
+w 30 41 00		//REG-65, L-DAC_gain=0dB                                                                                                                                                  
+w 30 42 00		//REG-66, R-DAC_gain=0dB                                                                                                                                               
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                                   
+w 30 40 00		//???40=64, set LDAC inverted to right channel, set into differential mode 
+
+A04,Call_Uplink_IMIC_Speaker  
+w 30 00 01		//Page-1; Set the input connection			                                 
+w 30 34 20		//REG-52; IN2L is routed to LMICPGA+ with 20K                                        
+w 30 36 20		//REG-54; IN2L is routed to LMICPGA- with 20K                                          
+w 30 37 00    //REG-55; Disconnect                                                                                         
+w 30 39 00    //REG-57; Disconnect                                                                                            
+w 30 3B 22		//REG-59; Left MICPGA enable; Vol=17dB                                                         
+w 30 3C 22		//REG-60; Right MICPGA enable; Vol=17dB                                                       
+w 30 00 00    //Page-0                                                                                                                                                                                 
+w 30 51 C0		//REG-81; Power up L-ADC, R-ADC,                                                                                                                                                      
+w 30 52 00 		//REG-82; L-ADC, R-ADC unmute                                                                                                                                                           
+w 30 53 00		//REG-83; L-ADC_gain=0dB                                                                                                                                                         
+w 30 54 00		//REG-84; R-ADC_gain=0dB                                                                                                                                                         
+w 30 00 01    //Page-1;                                                                                                                                                                                 
+w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only     
+w 30 0D 10    //REG-13; L-DACM routed to HPR !!                                                                                                                                
+w 30 12 00		//REG-18; LOL_Gain=0dB                                                                                                                                                          
+w 30 13 00		//REG-19; LOR_Gain=0dB                                                                                                                                                           
+w 30 00 00    //page-0                                                                                                                                                                                  
+w 30 40 00		//REG-64; DAC unmute                                                                                                                                                          
+w 30 41 00		//REG-65, L-DAC_gain=0dB                                                                                                                                                  
+w 30 42 00		//REG-66, R-DAC_gain=0dB                                                                                                                                               
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                                   
+w 30 40 00		//???40=64, set LDAC inverted to right channel, set into differential mode  
+
+A05,Call_Uplink_IMIC_Receiver_DualMIC  
+w 30 00 01		//Page-1; Set the input connection			                                 
+w 30 34 20		//REG-52; IN2L is routed to LMICPGA+ with 20K                                        
+w 30 36 20		//REG-54; IN2L is routed to LMICPGA- with 20K                                          
+w 30 37 00    //REG-55; Disconnect                                                                                         
+w 30 39 00    //REG-57; Disconnect                                                                                            
+w 30 3B 22		//REG-59; Left MICPGA enable; Vol=17dB                                                         
+w 30 3C 22		//REG-60; Right MICPGA enable; Vol=17dB                                                       
+w 30 00 00    //Page-0                                                                                                                                                                                 
+w 30 51 C0		//REG-81; Power up L-ADC, R-ADC,                                                                                                                                                      
+w 30 52 00 		//REG-82; L-ADC, R-ADC unmute                                                                                                                                                           
+w 30 53 00		//REG-83; L-ADC_gain=0dB                                                                                                                                                         
+w 30 54 00		//REG-84; R-ADC_gain=0dB                                                                                                                                                         
+w 30 00 01    //Page-1;                                                                                                                                                                                 
+w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only     
+w 30 0D 10    //REG-13; L-DACM routed to HPR !!                                                                                                                                
+w 30 12 00		//REG-18; LOL_Gain=0dB                                                                                                                                                          
+w 30 13 00		//REG-19; LOR_Gain=0dB                                                                                                                                                           
+w 30 00 00    //page-0                                                                                                                                                                                  
+w 30 40 00		//REG-64; DAC unmute                                                                                                                                                          
+w 30 41 00		//REG-65, L-DAC_gain=0dB                                                                                                                                                  
+w 30 42 00		//REG-66, R-DAC_gain=0dB                                                                                                                                               
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                                   
+w 30 40 00		//???40=64, set LDAC inverted to right channel, set into differential mode  
+
+A06,Call_Uplink_EMIC_Headphone_DualMIC  
+w 30 00 00
+
+A07,Call_Uplink_IMIC_Speaker_DualMIC  
+w 30 00 01		//Page-1; Set the input connection			                                 
+w 30 34 20		//REG-52; IN2L is routed to LMICPGA+ with 20K                                        
+w 30 36 20		//REG-54; IN2L is routed to LMICPGA- with 20K                                          
+w 30 37 00    //REG-55; Disconnect                                                                                         
+w 30 39 00    //REG-57; Disconnect                                                                                            
+w 30 3B 22		//REG-59; Left MICPGA enable; Vol=17dB                                                         
+w 30 3C 22		//REG-60; Right MICPGA enable; Vol=17dB                                                       
+w 30 00 00    //Page-0                                                                                                                                                                                 
+w 30 51 C0		//REG-81; Power up L-ADC, R-ADC,                                                                                                                                                      
+w 30 52 00 		//REG-82; L-ADC, R-ADC unmute                                                                                                                                                           
+w 30 53 00		//REG-83; L-ADC_gain=0dB                                                                                                                                                         
+w 30 54 00		//REG-84; R-ADC_gain=0dB                                                                                                                                                         
+w 30 00 01    //Page-1;                                                                                                                                                                                 
+w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only     
+w 30 0D 10    //REG-13; L-DACM routed to HPR !!                                                                                                                                
+w 30 12 00		//REG-18; LOL_Gain=0dB                                                                                                                                                          
+w 30 13 00		//REG-19; LOR_Gain=0dB                                                                                                                                                           
+w 30 00 00    //page-0                                                                                                                                                                                  
+w 30 40 00		//REG-64; DAC unmute                                                                                                                                                          
+w 30 41 00		//REG-65, L-DAC_gain=0dB                                                                                                                                                  
+w 30 42 00		//REG-66, R-DAC_gain=0dB                                                                                                                                               
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                                   
+w 30 40 00		//???40=64, set LDAC inverted to right channel, set into differential mode  
+
+A08,Call_Uplink_IMIC_Receiver_TestSIM
+w 30 00 00
+
+A09,Call_Uplink_EMIC_Headphone_TestSIM
+w 30 00 00
+
+A10,Call_Uplink_IMIC_Speaker_TestSIM
+w 30 00 00
+
+A11,Playback_Receiver
+w 30 00 00
+
+A12,Playback_Headphone
+w 30 00 00
+
+A13,Playback_Speaker  
+w 30 00 00
+
+A14,Ring_Headphone_Speaker  
+w 30 00 00
+
+A15,VoiceRecord_IMIC  
+w 30 00 01		//Set the input connection			                                 
+w 30 34 20		//REG-52; IN2L is routed to LMICPGA+ with 20K                                            
+w 30 36 20		//REG-54; IN2L is routed to LMICPGA- with 20K                                            
+w 30 37 00    //REG-55; Disconnect                                                                                        
+w 30 39 00    //REG-57; Disconnect                                                 
+w 30 3B 1C		//REG-59; Left_MICPGA_vol=14dB   due to ADIE TxFE1=24dB                                                                                                           
+w 30 00 00    //Page-0;                                                                                                                                                                                 
+w 30 51 C0		//REG-81; Power up LADC                                                                                                                                                         
+w 30 52 00 		//ADC unmute                                                                                                                                                            
+w 30 53 00		//LADC gain:0dB                                                                                                                                                                   
+w 30 00 01    //Page-01                                                                                                                                                                                  
+w 30 09 34		//REG-09; Power up LO and turn off HP 
+w 30 0D 10    //REG-13; L-DACM routed to HPR !! 
+w 30 12 06		//REG-18; LOL_gain=6dB  
+w 30 13 06		//REG-19; LOR_Gain=6dB                                                                                                                                              
+w 30 0E 08		//*
+w 30 0F 08    //*                                                                                                                                                
+w 30 00 00    //Page-0                                                                                                                                                                                 
+w 30 40 00		//DAC unmute                                                                                                                                                            
+w 30 41 00		//REG-65, LDAC gain=0dB                                                                                                                                                  
+w 30 42 00		//REG-66, RDAC gain=0dB                                                                                                                                                  
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                      
+
+A16,VoiceRecord_EMIC  
+w 30 00 01		//Set the input connection			                                  
+w 30 34 00		//REG-52; Disconnect                                                                  
+w 30 36 00		//REG-54; Disconnect                                                                  
+w 30 37 80    //REG-55; IN1_L-->R-MicPGA- with 20k                                          
+w 30 39 20    //REG-57; IN1_R-->R-MicPGA+ with 20k                                                                                         
+w 30 3C 18		//REG-60; Right MICPGA vol:12dB   because of EMIC sensitivity: -40dBV/Pa  ,ADIE TxFE1=24dB                                                      
+w 30 00 00    //Page-0                                                                                            
+w 30 51 40		//REG-81; Power up R-ADC                                                                   
+w 30 52 00 		//REG-82; ADC unmute                                                                                                                              
+w 30 54 00		//REG-84; RADC gain:0dB                                                                   
+w 30 00 01    //Page01                                                                                                                                                                                 
+w 30 09 34		//REG-09; Power up LO and turn off HP    
+w 30 0D 10    //REG-13; L-DACM routed to HPR !!                                                                                                                             
+w 30 12 03		//REG-18; LOL_gain=3dB                                                                                                                                                         
+w 30 13 03		//REG-19; LOR_Gain=3dB                                                                                                                                                         
+w 30 0E 08		//*
+w 30 0F 08    //*                                                                                                                                                       
+w 30 00 00                                                                                                                                                                                     
+w 30 40 00		//REG-64; DAC unmute                                                                                                                                                          
+w 30 41 00		//REG-65, LDAC gain:0dB                                                                                                                                            
+w 30 42 00		//REG-66, RDAC gain:0dB                                                                                                                                                
+w 30 3F D6		//REG-63, L-DAC powered up, R-DAC powered down; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                           
+
+A17,VideoRecord_IMIC  
+w 30 00 01		//Set the input connection			                                 
+w 30 34 20		//REG-52; IN2L is routed to LMICPGA+ with 20K                                            
+w 30 36 20		//REG-54; IN2L is routed to LMICPGA- with 20K                                            
+w 30 37 80    //REG-55; Disconnect                                                                                        
+w 30 39 20    //REG-57; Disconnect                                                 
+w 30 3B 1B		//REG-59; Left_MICPGA_vol=14dB  
+w 30 3C 20    //REG-60; Right_MICPGA_vol=16dB                                                                                                      
+w 30 00 00    //Page-0;                                                                                                                                                                                 
+w 30 51 C0		//REG-81; Power up LADC                                                                                                                                                         
+w 30 52 00 		//ADC unmute                                                                                                                                                            
+w 30 53 00		//LADC gain:0dB                                                                                                                                                                   
+w 30 00 01    //Page-01                                                                                                                                                                                  
+w 30 09 0C		//REG-09; Power up LO and turn off HP // nick modify 0C
+w 30 0D 00    //REG-13; L-DACM not routed to HPR !! 
+w 30 0C 00                                                                                                                                    
+w 30 00 00    //Page-0                                                                                                                                                                                 
+w 30 40 00		//DAC unmute                                                                                                                                                            
+w 30 41 00		//REG-65, LDAC gain=0dB                                                                                                                                                  
+w 30 42 00		//REG-66, RDAC gain=0dB                                                                                                                                                  
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                      
+
+A18,VideoRecord_EMIC  
+w 30 00 01		//Set the input connection			                                  
+w 30 34 00		//REG-52; Disconnect                                                                  
+w 30 36 00		//REG-54; Disconnect                                                                  
+w 30 37 80    //REG-55; IN1_L-->R-MicPGA- with 20k                                          
+w 30 39 20    //REG-57; IN1_R-->R-MicPGA+ with 20k                                          
+w 30 3B 32		//REG-59; Left MICPGA vol:25dB                                                            
+w 30 3C 32		//REG-60; Right MICPGA vol:25dB                                                           
+w 30 00 00    //Page-0                                                                                            
+w 30 51 40		//REG-81; Power up R-ADC                                                                   
+w 30 52 00 		//REG-82; ADC unmute                                                                      
+w 30 53 00		//REG-83; LADC gain:0dB                                                                   
+w 30 54 00		//REG-84; RADC gain:0dB                                                                   
+w 30 00 01    //Page01                                                                                                                                                                                 
+w 30 09 0C		//REG-09; Power up LO and turn off HP  
+w 30 0D 10    //REG-13; L-DACM routed to HPR !!                                                                                                                               
+w 30 12 03		//REG-18; LOL_gain=3dB                                                                                                                                                         
+w 30 13 03		//REG-19; LOR_Gain=3dB                                                                                                                                                         
+w 30 00 00                                                                                                                                                                                     
+w 30 40 00		//REG-64; DAC unmute                                                                                                                                                          
+w 30 41 00		//REG-65, LDAC gain:0dB                                                                                                                                            
+w 30 42 00		//REG-66, RDAC gain:0dB                                                                                                                                                
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                           
+w 30 40 00		//REG-64, set LDAC inverted to right channel, set into differential mode  
+
+A19,VoiceRecognition_IMIC  
+w 30 00 01
+w 30 34 00
+w 30 36 00
+w 30 37 02
+w 30 39 02
+w 30 3B 30
+w 30 3C 30
+w 30 00 00
+w 30 51 80
+w 30 52 08
+w 30 53 00
+w 30 54 00
+w 30 00 01
+w 30 0E 01
+w 30 0F 02
+w 30 09 3F
+w 30 12 3E
+w 30 13 3E
+
+//w 30 00 01		//Set the input connection			                                 
+//w 30 34 20		//REG-52; IN2L is routed to LMICPGA+ with 20K                                            
+//w 30 36 20		//REG-54; IN2L is routed to LMICPGA- with 20K                                            
+//w 30 37 00    //REG-55; Disconnect                                                                                        
+//w 30 39 00    //REG-57; Disconnect                                                 
+//w 30 3B 32		//REG-59; Left_MICPGA_vol=25dB                                                                                                             
+//w 30 00 00    //Page-0;                                                                                                                                                                                 
+//w 30 51 C0		//REG-81; Power up LADC                                                                                                                                                         
+//w 30 52 00 		//ADC unmute                                                                                                                                                            
+//w 30 53 00		//LADC gain:0dB                                                                                                                                                                   
+//w 30 00 01    //Page-01                                                                                                                                                                                  
+//w 30 09 0C		//REG-09; Power up LO and turn off HP 
+//w 30 0D 10    //REG-13; L-DACM routed to HPR !! 
+//w 30 12 03		//REG-18; LOL_gain=3dB  
+//w 30 13 03		//REG-19; LOR_Gain=3dB                                                                                                                                              
+//w 30 00 00    //Page-0                                                                                                                                                                                 
+//w 30 40 00		//DAC unmute                                                                                                                                                            
+//w 30 41 00		//REG-65, LDAC gain=0dB                                                                                                                                                  
+//w 30 42 00		//REG-66, RDAC gain=0dB                                                                                                                                                  
+//w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                      
+
+A20,VoiceRecognition_EMIC  
+w 30 00 01
+w 30 34 00
+w 30 36 00
+w 30 37 80
+w 30 39 20
+w 30 3B 30
+w 30 3C 30
+w 30 00 00
+w 30 51 80
+w 30 52 08
+w 30 53 00
+w 30 54 00
+w 30 00 01
+w 30 0E 01
+w 30 0F 02
+w 30 09 3F
+w 30 12 3E
+w 30 13 3E
+
+//w 30 00 01		//Set the input connection			                                  
+//w 30 34 00		//REG-52; Disconnect                                                                  
+//w 30 36 00		//REG-54; Disconnect                                                                  
+//w 30 37 80    //REG-55; IN1_L-->R-MicPGA- with 20k                                          
+//w 30 39 20    //REG-57; IN1_R-->R-MicPGA+ with 20k                                          
+//w 30 3B 32		//REG-59; Left MICPGA vol:25dB                                                            
+//w 30 3C 32		//REG-60; Right MICPGA vol:25dB                                                           
+//w 30 00 00    //Page-0                                                                                            
+//w 30 51 40		//REG-81; Power up R-ADC                                                                   
+//w 30 52 00 		//REG-82; ADC unmute                                                                      
+//w 30 53 00		//REG-83; LADC gain:0dB                                                                   
+//w 30 54 00		//REG-84; RADC gain:0dB                                                                   
+//w 30 00 01    //Page01                                                                                                                                                                                 
+//w 30 09 0C		//REG-09; Power up LO and turn off HP    
+//w 30 0D 10    //REG-13; L-DACM routed to HPR !!                                                                                                                             
+//w 30 12 03		//REG-18; LOL_gain=3dB                                                                                                                                                         
+//w 30 13 03		//REG-19; LOR_Gain=3dB                                                                                                                                                         
+//w 30 00 00                                                                                                                                                                                     
+//w 30 40 00		//REG-64; DAC unmute                                                                                                                                                          
+//w 30 41 00		//REG-65, LDAC gain:0dB                                                                                                                                            
+//w 30 42 00		//REG-66, RDAC gain:0dB                                                                                                                                                
+//w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                           
+//w 30 40 00		//REG-64, set LDAC inverted to right channel, set into differential mode  
+
+A21,FM_In_SPK  
+w 30 00 01		//Set the input connection                                    
+w 30 34 0C		//REG-52, IN3L is routed to LMICPGA with 40K                  
+w 30 36 C0		//REG-54, CM is routed to LMICPGA via CM1L with 40K           
+w 30 37 0C		//REG-55, IN3R is routed to RMICPGA with 40K                  
+w 30 39 C0    //REG-57, CM is routed to RMICPGA via CM1L with 40K           
+w 30 3B 00		//REG-59; Left MICPGA vol=0dB                                
+w 30 3C 00		//REG-60; Right MICPGA vol=0dB                               
+w 30 00 00    //Page-0                                                      
+w 30 51 C0		//REG-81, Power up L-ADC and R-ADC                            
+w 30 52 00 		//REG-82, ADC unmute                                          
+w 30 53 00		//REG-83, LADC_gain=0dB                                       
+w 30 54 00		//REG-84, RADC_gain=0dB                                       
+
+A22,FM_In_Headphone  
+w 30 00 01		//Set the input connection  
+w 30 34 0C		//REG-52, IN3L is routed to LMICPGA with 40K
+w 30 36 C0		//REG-54, CM is routed to LMICPGA via CM1L with 40K
+w 30 37 0C		//REG-55, IN3R is routed to RMICPGA with 40K         
+w 30 39 C0    //REG-57, CM is routed to RMICPGA via CM1L with 40K  
+w 30 3B 1D		//REG-59; Left MICPGA vol=14.5dB
+w 30 3C 1D		//REG-60; Right MICPGA vol=14.5dB
+w 30 00 00    //Page-0
+w 30 51 C0		//REG-81, Power up L-ADC and R-ADC 
+w 30 52 00 		//REG-82, ADC unmute
+w 30 53 00		//REG-83, LADC_gain=0dB
+w 30 54 00		//REG-84, RADC_gain=0dB
+
+A23,TTY_In_HCO  
+w 30 00 01
+w 30 34 00
+w 30 36 00
+w 30 37 80
+w 30 39 20
+w 30 3B 1C
+w 30 3C 1C
+w 30 00 00
+w 30 51 00
+w 30 52 88
+w 30 53 00
+w 30 54 00
+w 30 00 01
+w 30 0C 08
+w 30 0D 10
+w 30 0E 01
+w 30 0F 02
+w 30 09 3D
+w 30 12 00
+w 30 13 00
+w 30 00 00
+w 30 40 00
+w 30 41 00
+w 30 42 00
+w 30 3F D6
+
+//w 30 00 01		//Page-1; Set the input connection		                                  
+//w 30 34 00		//REG-52; Disconnect                                            
+//w 30 36 00		//REG-54; Disconnect                                            
+//w 30 37 80    //REG-55; IN1_L-->R-MicPGA- with 20k                                                                                            
+//w 30 39 20    //REG-57; IN1_R-->R-MicPGA+ with 20k                                                                                            
+//w 30 3B 3C		//REG-59; Left MicPGA enable; Vol=30dB                                                          
+//w 30 3C 3C		//REG-60; Right MicPGA enable; Vol=30dB                                                       
+//w 30 00 00    //Page-0                                                                                           
+//w 30 51 40		//REG-81; Power up R-ADC                                                                   
+//w 30 52 00 		//REG-82; L-ADC, R-ADC unmute?                                                                     
+//w 30 53 00		//REG-83; L-ADC_gain=0dB                                                                
+//w 30 54 00		//REG-84; R-ADC_gain=0dB                                                                 
+//w 30 00 01    //page-1                                                                                                                                                                                 
+//w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only   
+//w 30 0D 10    //REG-13; L-DACM routed to HPR !!                                                                                                                       
+//w 30 12 00		//REG-18; LOL_Gain=0dB                                                                                                                                                      
+//w 30 13 00		//REG-19; LOR_Gain=0dB                                                                                                                                              
+//w 30 00 00    //page-0                                                                                                                                                                                 
+//w 30 40 00		//REG-64; DAC unmute                                                                                                                                                       
+//w 30 41 00		//REG-65, L-DAC_gain=0dB                                                                                                                                               
+//w 30 42 00		//REG-66, R-DAC_gain=0dB                                                                                                                                              
+//w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                               
+
+A24,TTY_In_VCO  
+w 30 00 01
+w 30 34 00
+w 30 36 00
+w 30 37 02
+w 30 39 02
+w 30 3B 1C
+w 30 3C 1C
+w 30 00 00
+w 30 51 00
+w 30 52 88
+w 30 53 00
+w 30 54 00
+w 30 00 01
+w 30 0C 08
+w 30 0D 10
+w 30 0E 01
+w 30 0F 02
+w 30 09 3D
+w 30 12 00
+w 30 13 00
+w 30 00 00
+w 30 40 00
+w 30 41 00
+w 30 42 00
+w 30 3F D6
+
+//w 30 00 01		//Page-1; Set the input connection			                                 
+//w 30 34 20		//REG-52; IN2L is routed to LMICPGA+ with 20K                                        
+//w 30 36 20		//REG-54; IN2L is routed to LMICPGA- with 20K                                          
+//w 30 37 80    //REG-55; IN1R is routed to RMICGPA+ with 20K                                                                                           
+//w 30 39 20    //REG-57; IN1L is routed to RMICGPA- with 20K                                                                                            
+//w 30 3B 32		//REG-59; Left MICPGA enable; Vol=25dB                                                         
+//w 30 3C 32		//REG-60; Right MICPGA enable; Vol=25dB                                                       
+//w 30 00 00    //Page-0                                                                                                                                                                                 
+//w 30 51 C0		//REG-81; Power up L-ADC, R-ADC,                                                                                                                                                      
+//w 30 52 00 		//REG-82; L-ADC, R-ADC unmute                                                                                                                                                           
+//w 30 53 00		//REG-83; L-ADC_gain=0dB                                                                                                                                                         
+//w 30 54 00		//REG-84; R-ADC_gain=0dB                                                                                                                                                         
+//w 30 00 01    //Page-1;                                                                                                                                                                                 
+//w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only 
+//w 30 0D 10    //REG-13; L-DACM routed to HPR !!                                                                                                                                
+//w 30 12 00		//REG-18; LOL_Gain=0dB                                                                                                                                                          
+//w 30 13 00		//REG-19; LOR_Gain=0dB                                                                                                                                                           
+//w 30 00 00    //page-0                                                                                                                                                                                  
+//w 30 40 00		//REG-64; DAC unmute                                                                                                                                                          
+//w 30 41 00		//REG-65, L-DAC_gain=0dB                                                                                                                                                  
+//w 30 42 00		//REG-66, R-DAC_gain=0dB                                                                                                                                               
+//w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                                   
+//w 30 40 00		//???40=64, set LDAC inverted to right channel, set into differential mode                                   
+
+A25,TTY_In_Full  
+w 30 00 01
+w 30 34 00
+w 30 36 00
+w 30 37 80
+w 30 39 20
+w 30 3B 00
+w 30 3C 00
+w 30 00 00
+w 30 51 00
+w 30 52 88
+w 30 53 00
+w 30 54 00
+w 30 00 01
+w 30 0C 08
+w 30 0D 10
+w 30 0E 01
+w 30 0F 02
+w 30 09 3D
+w 30 12 00
+w 30 13 00
+w 30 00 00
+w 30 40 00
+w 30 41 00
+w 30 42 00
+w 30 3F D6
+
+//w 30 00 01		//Page-1; Set the input connection		                                  
+//w 30 34 00		//REG-52; Disconnect                                            
+//w 30 36 00		//REG-54; Disconnect                                            
+//w 30 37 80    //REG-55; IN1_L-->R-MicPGA- with 20k                                                                                            
+//w 30 39 20    //REG-57; IN1_R-->R-MicPGA+ with 20k                                                                                            
+//w 30 3B 10		//REG-59; Left MicPGA enable; Vol=8dB                                                          
+//w 30 3C 10		//REG-60; Right MicPGA enable; Vol=8dB                                                       
+//w 30 00 00    //Page-0                                                                                           
+//w 30 51 C0		//REG-81; Power up R-ADC                                                                   
+//w 30 52 00 		//REG-82; L-ADC, R-ADC unmute?                                                                     
+//w 30 53 00		//REG-83; L-ADC_gain=0dB                                                                
+//w 30 54 00		//REG-84; R-ADC_gain=0dB                                                                 
+//w 30 00 01    //page-1                                                                                                                                                                                 
+//w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only   
+//w 30 0D 10    //REG-13; L-DACM routed to HPR !!                                                                                                                       
+//w 30 12 00		//REG-18; LOL_Gain=0dB                                                                                                                                                      
+//w 30 13 00		//REG-19; LOR_Gain=0dB                                                                                                                                              
+//w 30 00 00    //page-0                                                                                                                                                                                 
+//w 30 40 00		//REG-64; DAC unmute                                                                                                                                                       
+//w 30 41 00		//REG-65, L-DAC_gain=0dB                                                                                                                                               
+//w 30 42 00		//REG-66, R-DAC_gain=0dB                                                                                                                                              
+//w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                               
+
+A26,Muse  
+w 30 00 00
+
+A27,HAC		//A01
+w 30 00 01		//Page-1; Set the input connection			                                 
+w 30 34 20		//REG-52; IN2L is routed to LMICPGA+ with 20K                                            
+w 30 36 20		//REG-54; IN2R is routed to LMICPGA- with 20K                                            
+w 30 37 00    //REG-55; Disconnect                                                                                        
+w 30 39 00    //REG-57; Disconnect                                                                                       
+w 30 3B 3C		//REG-59; Left MICPGA enable; Vol=30dB, ADIE=4.5dB                                                           
+w 30 3C 3C		//REG-60; Right MICPGA enable; Vol=30dB, ADIE=4.5dB                                                          
+w 30 00 00    //Page-0                                                                                                                                                                                 
+w 30 51 C0		//REG-81; Power up L-ADC, R-ADC,                                                                                                                                                        
+w 30 52 00 		//REG-82; L-ADC, R-ADC unmute                                                                                                                                                            
+w 30 53 00		//REG-83; L-ADC_gain=0dB                                                                                                                                                         
+w 30 54 00		//REG-84; R-ADC_gain=0dB                                                                                                                                                         
+w 30 00 01    //Page-1; Set the Output connection                                                                                                                                                                                
+w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only   
+w 30 0D 10    //REG-13; L-DACM routed to HPR !!                                                          
+w 30 12 00		//REG-18; LOL_Gain=0dB                                                                                                                                                           
+w 30 13 00		//REG-19; LOR_Gain=0dB                                                                                                                                                           
+w 30 00 00    //Page-0                                                                                                                                                                                 
+w 30 40 00		//REG-64; DAC unmute                                                                                                                                                            
+w 30 41 00		//REG-65, L-DAC_gain=0dB                                                                                                                                                  
+w 30 42 00		//REG-66, R-DAC_gain=0dB                                                                                                                                                  
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                                   
+
+A28,Low_Power_Mode_IMIC_Receiv  
+w 30 00 00
+
+A29,Uplink_Path_Off  //Turn off Uplink path connection
+w 30 00 01  //Disconnect input path connection                                                         
+w 30 34 00    //0x34=52, Disconnect LeftMICPGA,  P path                                                  
+w 30 36 00    //0x36=54, Disconnect LeftMICPGA,  N path                                                  
+w 30 39 00    //0x37=55, Disconnect RightMICPGA, P path                                                  
+w 30 37 00    //0x39=57, Disconnect RightMICPGA, N path                                                  
+w 30 3B 80    //0x3B=59,Set LeftMICPGA  0dB, and mute                                                    
+w 30 3C 80    //0x3C=60,Set RightMICPGA 0dB, and mute                                                    
+w 30 00 00    //Set ADC gain into 0dB                                                                    
+w 30 52 88    //0x52=82,L/R ADC mute                                                                     
+w 30 53 00    //0x53=83, LADC gain:0dB                                                                   
+w 30 54 00    //0x54=84, RADC gain:0dB                                                                   
+w 30 12 40    //* 3254 default value is [0 000, 0001], the first bit is NADC enable(1 enable, 0 disable).
+w 30 13 40    //* 3254 default value is [0 000, 0001], the first bit is MADC enable(1 enable, 0 disable).
+
+A30,Uplink_Wakeup  
+w 30 00 01  //Wake up the codec                                                
+w 30 01 08    //Disable weak connection of AVDD                                  
+w 30 02 21    //Turn on the Analog block & PLL & AVDD                            
+w 30 3D 00    //0x3D=61, ADC=PTM_R4                                              
+w 30 47 32    //0x47=71, analog input quick charging powerup time = 6.4ms        
+w 30 14 00    //* reg20, 3254 default value                                      
+w 30 34 00    //* reg52, 3254 default value                                      
+w 30 36 00    //* reg54, 3254 default value                                      
+w 30 37 00    //* reg55, 3254 default value                                      
+w 30 39 00    //* reg57, 3254 default value                                      
+w 30 00 00                                                                       
+w 30 51 C0    //* reg81, L- R- ADC power up.                                     
+w 30 52 00    //0x52=82, ADC unmute                                              
+w 30 3D 00    //* reg61, The ADC miniDSP will be used for signal processing.     
+w 30 00 01    //*                                                                
+w 30 09 3F    //* reg09, HPL- R- power up, LOL- R- power up, MAL- R- power up.   
+
+A31,Power_Off  
+w 30 00 01  //*                                                                                          
+w 30 09 00    //* reg09, turn off HP, LO, MA amplifier.                                                    
+w 30 3B 00    //* reg59, L-MICPGA turn on, and gain set 0dB.                                               
+w 30 3C 00    //* reg60, R-MICPGA turn on, and gain set 0dB.                                               
+w 30 7B 01    //* reg123, reference will power up in 40ms when analog block are powered up.                
+w 30 00 00    //*                                                                                          
+w 30 57 00    //* reg88, L- AGC max gain setting to 0dB.                                                   
+w 30 56 00    //* reg87, 3254 default value. L- AGC noise gate is disabled.                                
+w 30 5F 00    //* reg88, R- AGC max gain setting to 0dB.                                                   
+w 30 5E 00    //* reg95, 3254 default value. R- AGC noise gate is disabled.                
+w 30 00 00  //Turn OFF Analog block                                                             
+w 30 51 00    //0x52=81, L/R ADC powerdown                                                                 
+w 30 40 0C    //* reg64, 3254 default value. DAC setting.                                                  
+r 30 24 88    //* reg36, [Read only] DAC flag, default value is 0x00.                                      
+w 30 3F 16    //0x3F=63, DAC powerdown                                                                     
+r 30 25 00    //* reg37, [Read only] DAC flag, default value.                                              
+r 30 26 11    //* reg38, [Read only] DAC flag, default value is 0x00.                                      
+w 30 00 01    //*                                                                                          
+w 30 0C 00    //* reg12, 3254 default value. HPL routing.                                                  
+w 30 0D 00    //* reg13, 3254 default value. HPR routing.                                                  
+w 30 0E 00    //* reg14, 3254 default value. LOL routing.                                                  
+w 30 0F 00    //* reg15, 3254 default value. LOR routing.                                                  
+w 30 33 00    //*                                                                                          
+w 30 3A 00    //* reg58, 3254 default value. Floating input config.                                        
+w 30 00 00    //*                                                                                          
+w 30 1D 00    //* reg29, 3254 default value. audio interface setting.                                      
+w 30 1A 01    //* reg26, 3254 default value. CLKOUT M divider.                                             
+w 30 43 00    //* reg67, 3254 default value. Headset detection cofig.                                      
+d 30 00 C8    //* what?                                                                                    
+w 30 00 01    //Turn off main power                                                                       
+w 30 3A 00    //* reg58, 3254 default value. Floating input config.                                        
+w 30 01 00    //Enable weak connection of AVDD before AVDD is powered down                                 
+w 30 02 A8    //* Turn off Analog block & AVDD                                                             
+                                       
+A32,Sleep_with_HP_In  
+w 30 00 00
+
+A33,VoiceRecord_IMIC_playback_speaker  
+w 30 00 01
+w 30 09 3F
+w 30 10 06
+w 30 11 06
+w 30 0C 08
+w 30 0D 10
+w 30 00 00
+w 30 40 00
+w 30 41 00
+w 30 42 00
+w 30 3F F2
+w 30 00 01
+w 30 34 00
+w 30 36 00
+w 30 37 02
+w 30 39 02
+w 30 3B 30
+w 30 3C 30
+w 30 00 00
+w 30 51 80
+w 30 52 08
+w 30 53 00
+w 30 54 00
+w 30 00 01
+w 30 0E 01
+w 30 0F 02
+w 30 12 3E
+w 30 13 3E
+
+A34,VoiceRecord_EMIC_Playback_headphone  
+w 30 00 01
+w 30 10 02
+w 30 11 02
+w 30 0C 08
+w 30 0D 08
+w 30 09 3F
+w 30 00 00
+w 30 41 00
+w 30 42 00
+w 30 3F D6
+w 30 40 00
+w 30 00 01
+w 30 34 00
+w 30 36 00
+w 30 37 80
+w 30 39 20
+w 30 3B 30
+w 30 3C 30
+w 30 00 00
+w 30 51 80
+w 30 52 08
+w 30 53 00
+w 30 54 00
+w 30 00 01
+w 30 0E 01
+w 30 0F 02
+w 30 12 3E
+w 30 13 3E
+
+A35,VoiceRecord_IMIC_Playback_headphone  
+w 30 00 01
+w 30 10 02
+w 30 11 02
+w 30 0C 08
+w 30 0D 08
+w 30 09 3F
+w 30 00 00
+w 30 41 00
+w 30 42 00
+w 30 3F D6
+w 30 40 00
+w 30 00 01
+w 30 34 00
+w 30 36 00
+w 30 37 02
+w 30 39 02
+w 30 3B 1C
+w 30 3C 1C
+w 30 00 00
+w 30 51 80
+w 30 52 08
+w 30 53 00
+w 30 54 00
+w 30 00 01
+w 30 0E 01
+w 30 0F 02
+w 30 12 00
+w 30 13 00
+
+A36,SKYPE_receiver_IMIC  
+w 30 00 01
+w 30 09 3F
+w 30 10 06
+w 30 11 06
+w 30 0C 08
+w 30 0D 10
+w 30 00 00
+w 30 40 00
+w 30 41 00
+w 30 42 00
+w 30 3F F2
+w 30 00 01
+w 30 34 00
+w 30 36 00
+w 30 37 02
+w 30 39 02
+w 30 3B 1C
+w 30 3C 1C
+w 30 00 00
+w 30 51 80
+w 30 52 08
+w 30 53 00
+w 30 54 00
+w 30 00 01
+w 30 0E 01
+w 30 0F 02
+w 30 12 00
+w 30 13 00
+
+A37,SKYPE_Speaker_IMIC  
+w 30 00 01
+w 30 09 3F
+w 30 10 06
+w 30 11 06
+w 30 0C 08
+w 30 0D 10
+w 30 00 00
+w 30 40 00
+w 30 41 00
+w 30 42 00
+w 30 3F F2
+w 30 00 01
+w 30 34 00
+w 30 36 00
+w 30 37 02
+w 30 39 02
+w 30 3B 08
+w 30 3C 08
+w 30 00 00
+w 30 51 80
+w 30 52 08
+w 30 53 00
+w 30 54 00
+w 30 00 01
+w 30 0E 01
+w 30 0F 02
+w 30 12 00
+w 30 13 00
+
+A38,SKYPE_Headset_EMIC  
+w 30 00 01
+w 30 10 02
+w 30 11 02
+w 30 0C 08
+w 30 0D 08
+w 30 09 3F
+w 30 00 00
+w 30 41 00
+w 30 42 00
+w 30 3F D6
+w 30 40 00
+w 30 00 01
+w 30 34 00
+w 30 36 00
+w 30 37 80
+w 30 39 20
+w 30 3B 1C
+w 30 3C 1C
+w 30 00 00
+w 30 51 80
+w 30 52 08
+w 30 53 00
+w 30 54 00
+w 30 00 01
+w 30 0E 01
+w 30 0F 02
+w 30 12 00
+w 30 13 00
+
+A39,SKYPE_NO_MIC_Headset_IMIC  
+w 30 00 01
+w 30 10 02
+w 30 11 02
+w 30 0C 08
+w 30 0D 08
+w 30 09 3F
+w 30 00 00
+w 30 41 00
+w 30 42 00
+w 30 3F D6
+w 30 40 00
+w 30 00 01
+w 30 34 00
+w 30 36 00
+w 30 37 02
+w 30 39 02
+w 30 3B 1C
+w 30 3C 1C
+w 30 00 00
+w 30 51 80
+w 30 52 08
+w 30 53 00
+w 30 54 00
+w 30 00 01
+w 30 0E 01
+w 30 0F 02
+w 30 12 00
+w 30 13 00
+
+A40,Stereo_video_recording_IMIC_mode1  
+w 30 00 01		//Set the input connection			                                 
+w 30 34 20		//REG-52; IN2L is routed to LMICPGA+ with 20K                                            
+w 30 36 20		//REG-54; IN2L is routed to LMICPGA- with 20K                                            
+w 30 37 80    //REG-55; Disconnect                                                                                        
+w 30 39 20    //REG-57; Disconnect                                                 
+w 30 3B 1B		//REG-59; Left_MICPGA_vol=14dB  
+w 30 3C 20    //REG-60; Right_MICPGA_vol=16dB                                                                                                      
+w 30 00 00    //Page-0;                                                                                                                                                                                 
+w 30 51 C0		//REG-81; Power up LADC                                                                                                                                                         
+w 30 52 00 		//ADC unmute                                                                                                                                                            
+w 30 54 00		//*                                                                                                                                                      
+w 30 53 00		//LADC gain:0dB                                                                                                                                                                   
+w 30 00 01    //Page-01                                                                                                                                                                                  
+w 30 0E 08		//*
+w 30 0F 08    //*            
+w 30 12 00		//*
+w 30 13 00		//*                                                                                                                                                            
+w 30 09 0C		//REG-09; Power up LO and turn off HP // nick modify 0C
+w 30 0D 00    //REG-13; L-DACM not routed to HPR !! 
+w 30 0C 00                                                                                                                                    
+w 30 00 00    //Page-0                                                                                                                                                                                 
+w 30 40 00		//DAC unmute                                                                                                                                                            
+w 30 41 00		//REG-65, LDAC gain=0dB                                                                                                                                                  
+w 30 42 00		//REG-66, RDAC gain=0dB                                                                                                                                                  
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                      
+
+A41,Stereo_video_recording_IMIC_mode2  //main mic left.
+w 30 00 01		//Set the input connection			                                 
+w 30 34 02		//IN1R 20k to LMICPGA(P).
+w 30 36 80		//CM1L 20k to LMICPGA(M).
+w 30 37 02		//IN2L 20k to RMICPGA(P).
+w 30 39 80		//CM1R 20k to RMICPGA(M).
+w 30 3B 1B		//REG-59; Left_MICPGA_vol=14dB  
+w 30 3C 20    //REG-60; Right_MICPGA_vol=16dB                                                                                                      
+w 30 00 00    //Page-0;                                                                                                                                                                                 
+w 30 51 C0		//REG-81; Power up LADC                                                                                                                                                         
+w 30 52 00 		//ADC unmute                                                                                                                                                            
+w 30 53 00		//LADC gain:0dB                                                                                                                                                                   
+w 30 54 00		//*                                                                                                                                                                     
+w 30 00 01    //Page-01                                                                                                                                                                                  
+w 30 0E 08		//*
+w 30 0F 08    //*
+w 30 12 00		//*
+w 30 13 00		//* 
+w 30 09 0C		//REG-09; Power up LO and turn off HP // nick modify 0C
+w 30 0D 00    //REG-13; L-DACM not routed to HPR !! 
+w 30 0C 00                                                                                                                                    
+w 30 00 00    //Page-0                                                                                                                                                                                 
+w 30 40 00		//DAC unmute                                                                                                                                                            
+w 30 41 00		//REG-65, LDAC gain=0dB                                                                                                                                                  
+w 30 42 00		//REG-66, RDAC gain=0dB                                                                                                                                                  
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                      
+
+/////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
+In downlink path
+B00,Initial   
+w 30 00 00
+
+B01,Call_Downlink_IMIC_Receiver  
+w 30 00 01    //Page-1     
+w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR amp Only.
+w 30 0D 10    //REG-13; L-DACM routed to HPR !!   
+w 30 10 07		//HPL_Gain=7dB
+w 30 11 07		//HPR_Gain=7dB
+w 30 00 00    //Page-0     
+w 30 40 00		//REG-64; DAC unmute
+w 30 41 00		//REG-65, L-DAC_gain=0dB
+w 30 42 00		//REG-66, R-DAC_gain=0dB  
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable
+
+B02,Call_Downlink_EMIC_Headphone  
+w 30 00 01    //Page-1
+w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR amp Only.
+w 30 0D 10    //REG-13; L-DACM routed to HPR !! 
+w 30 10 3F		//HPL_Gain=-1dB
+w 30 11 3F		//HPR_Gain=-1dB
+w 30 00 00    //Page-0
+w 30 40 00		//REG-64, DAC unmute
+w 30 41 00		//REG-65, L-DAC_gain=0dB
+w 30 42 00		//REG-66, R-DAC_gain=0dB  
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                      
+
+B03,Call_Downlink_IMIC_Headphone  
+w 30 00 01    //Page-1
+w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only 
+w 30 0D 10    //REG-13; L-DACM routed to HPR !! 
+w 30 10 03		//HPL_Gain=3dB
+w 30 11 03		//HPR_Gain=3dB
+w 30 00 00    //Page-0
+w 30 40 00		//REG-64, DAC unmute
+w 30 41 00		//REG-65, L-DAC_gain=0dB
+w 30 42 00		//REG-66, R-DAC_gain=0dB  
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                      
+
+B04,Call_Downlink_IMIC_Speaker  
+w 30 00 01    //Page-1
+w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only 
+w 30 0D 10    //REG-13; L-DACM routed to HPR !! 
+w 30 10 00		//HPL_Gain=0dB
+w 30 11 00		//HPR_Gain=0dB
+w 30 00 00    //Page-0
+w 30 40 00		//REG-64, DAC unmute
+w 30 41 00		//REG-65, L-DAC_gain=0dB
+w 30 42 00		//REG-66, R-DAC_gain=0dB  
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                      
+
+B05,Call_Downlink_IMIC_Receiver_DualMIC		//B01
+w 30 00 01    //Page-1     
+w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only
+w 30 0D 10    //REG-13; L-DACM routed to HPR !!   
+w 30 10 07		//HPL_Gain=7dB
+w 30 11 07		//HPR_Gain=7dB
+w 30 00 00    //Page-0     
+w 30 40 00		//REG-64; DAC unmute
+w 30 41 00		//REG-65, L-DAC_gain=0dB
+w 30 42 00		//REG-66, R-DAC_gain=0dB  
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable
+
+B06,Call_Downlink_EMIC_Headphone_DualMIC  
+w 30 00 00
+
+B07,Call_Downlink_IMIC_Speaker_DualMIC		//B04
+w 30 00 01    //Page-1
+w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only 
+w 30 0D 10    //REG-13; L-DACM routed to HPR !! 
+w 30 10 00		//HPL_Gain=0dB
+w 30 11 00		//HPR_Gain=0dB
+w 30 00 00    //Page-0
+w 30 40 00		//REG-64, DAC unmute
+w 30 41 00		//REG-65, L-DAC_gain=0dB
+w 30 42 00		//REG-66, R-DAC_gain=0dB  
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                      
+
+
+B08,Call_Downlink_IMIC_Receiver_TestSIM  
+w 30 00 00
+
+B09,Call_Downlink_EMIC_Headphone_TestSIM  
+w 30 00 00
+
+B10,Call_Downlink_IMIC_Speaker_TestSIM  
+w 30 00 00
+
+B11,Playback_Reciver		//
+w 30 00 01
+w 30 09 30		//REG-9; Power up HP and turn off Line output
+w 30 10 03		//HP Gain:3dB
+w 30 11 03		//HP Gain:3dB
+w 30 0C 08  //* LDAC-p router to HPL.
+w 30 0D 10  //* RDAC-m router to HPR.
+w 30 00 00
+w 30 40 00		//DAC unmute
+w 30 41 00		//REG-65, LDAC gain:0dB
+w 30 42 00		//REG-66, RDAC gain:0dB
+w 30 3F 96		//REG-63, open LDAC power only, soft mute is disabled
+w 30 40 80		//REG-64, set LDAC inverted to right channel, set into differential mode
+
+
+B12,Playback_Headphone  
+w 30 00 01												
+w 30 09 30		//REG-9; Power up HP and turn off Line output                  
+w 30 10 05		//*REG-16;HPL_Gain=0dB for 512mV output, in HP amp 0dB condition, under 0dBFS.      
+w 30 11 05		//*REG-17;HPR_Gain=0dB for 512mV output, in HP amp 0dB condition, under 0dBFS.    
+w 30 0C 08	  //* LDAC-p router to HPL.
+w 30 0D 08  	//* RDAC-p router to HPR.  
+w 30 00 00                                             
+w 30 51 C0		//*Sync with Kingdom to avoid TxRx same time issue.
+w 30 40 00		//REG-64; DAC unmute                                            
+w 30 41 00		//REG-65, LDAC gain:0dB                                  
+w 30 42 00		//REG-66, RDAC gain:0dB                                  
+w 30 3F D6		//REG-63, open LDAC/RDAC power up, soft mute is disabled    
+
+B13,Playback_Speaker  
+w 30 00 01
+w 30 09 30		//REG-9; Power up HP and turn off Line output
+w 30 10 00		//REG-16; HP Gain:0dB  
+w 30 11 00		//REG-17; HP Gain:0dB	 
+w 30 00 00
+w 30 51 CC		//Turn ON ADC for SRS
+w 30 40 00		//DAC unmute
+w 30 41 00		//REG-65, LDAC gain:0dB
+w 30 42 00		//REG-66, RDAC gain:0dB
+w 30 3F 96		//REG-63, open LDAC power only, soft mute is disabled
+w 30 40 80		//REG-64, set LDAC inverted to right channel, set into differential mode
+
+B14,Ring_Headphone_Speaker  
+w 30 00 01
+w 30 09 30		//REG-9; Power up HP and turn off Line output
+w 30 10 0C		//HP Gain:12dB
+w 30 11 0C		//HP Gain:12dB
+w 30 00 00
+w 30 51 CC		//Turn ON ADC for SRS
+w 30 40 00		//DAC unmute
+w 30 41 00		//REG-65, LDAC gain:0dB
+w 30 42 00		//REG-66, RDAC gain:0dB
+w 30 3F 96		//REG-63, open LDAC power only, soft mute is disabled
+w 30 40 80		//REG-64, set LDAC inverted to right channel, set into differential mode
+
+B15,Playback_Speaker_ALT  
+w 30 00 01                                                                                      
+w 30 09 30		//REG-9; Power up HP and turn off Line output                           
+w 30 10 00		//REG-16; HP Gain:0dB                                                   
+w 30 11 00		//REG-17; HP Gain:0dB                                                   
+w 30 00 00
+w 30 40 00		//DAC unmute                                                            
+w 30 41 EC		//REG-65, LDAC gain:-10dB                                                 
+w 30 42 EC		//REG-66, RDAC gain:-10dB                                                 
+w 30 3F 96		//REG-63, open LDAC power only, soft mute is disabled                   
+w 30 40 80		//REG-64, set LDAC inverted to right channel, set into differential mode
+
+B16,USB_AUDIO  
+w 30 00 01
+w 30 12 02
+w 30 13 02
+w 30 0F 08
+w 30 0E 08
+w 30 09 0C
+w 30 00 00
+w 30 41 00
+w 30 42 00
+w 30 3F D6
+w 30 40 00
+
+B17,VideoRecord_IMIC   
+w 30 00 00
+
+B18,VideoRecord_EMIC   
+w 30 00 00
+
+B19,VoiceRecognition_IMIC  
+w 30 00 00
+
+B20,VoiceRecognition_EMIC  
+w 30 00 00
+
+B21,FM_Out_SPK  
+w 30 00 01    //Page-1
+w 30 09 32    //*
+w 30 10 0D    //REG-16; HPL_Gain=13dB                             
+w 30 11 0D    //REG-17; HPR_Gain=13dB                             
+w 30 0C 0A		//*
+w 30 0D 00		//*
+w 30 00 00    //Page-0                    
+w 30 40 80		//DAC unmute; LDAC is inversely routed to RDAC                                           
+w 30 41 00    //REG-65; LDAC gain:0dB                              
+w 30 42 00    //REG-66; RDAC gain:0dB                              
+w 30 3F D6    //REG-63, L-DAC and R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                                            
+
+B22,FM_Out_Headphone  
+w 30 00 01    //Page-1                                                                                                                                                                                                                 
+w 30 09 33    //*REG-9; Powered up HP_PGA_Gain_Ctrl;  Turned on LO_PGA_gain_Ctrl; turn on MALR amp.                                                                                                                                                 
+w 30 10 00    //REG-16; HPL_Gain=0dB                                                                                                                                                                                                       
+w 30 11 00    //REG-17; HPR_Gain=0dB                                                                                                                                                                                                       
+w 30 0C 0A		//*
+w 30 0D 0A		//*
+w 30 00 00    //Page-0                                                                                                                                                                                                           
+w 30 40 00		//DAC unmute                                                                                                                                                                                                                   
+w 30 41 00    //REG-65; LDAC gain:0dB                                                                                                                                                                                                  
+w 30 42 00    //REG-66; RDAC gain:0dB                                                                                                                                                                                                  
+w 30 3F D6    //REG-63, L-DAC and R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                                                                
+
+B23,TTY_Out_HCO  
+w 30 00 01
+w 30 09 3C
+w 30 10 06
+w 30 11 06
+w 30 0C 08
+w 30 0D 10
+w 30 00 00
+w 30 40 00
+w 30 41 00
+w 30 42 00
+w 30 3F D6
+w 30 40 00
+
+//w 30 00 01    //Page-1
+//w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only 
+//w 30 0D 10    //REG-13; L-DACM routed to HPR !! 
+//w 30 10 03		//HPL_Gain=3dB
+//w 30 11 03		//HPR_Gain=3dB
+//w 30 00 00    //Page-0
+//w 30 40 00		//REG-64, DAC unmute
+//w 30 41 00		//REG-65, L-DAC_gain=0dB
+//w 30 42 00		//REG-66, R-DAC_gain=0dB  
+//w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                      
+
+B24,TTY_Out_VCO  
+w 30 00 01
+w 30 09 3C
+w 30 10 00
+w 30 11 00
+w 30 0C 08
+w 30 0D 10
+w 30 00 00
+w 30 40 00
+w 30 41 00
+w 30 42 00
+w 30 3F D6
+w 30 40 00
+
+//w 30 00 01    //Page-1
+//w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only 
+//w 30 0D 10    //REG-13; L-DACM routed to HPR !! 
+//w 30 10 03		//HPL_Gain=3dB
+//w 30 11 03		//HPR_Gain=3dB
+//w 30 00 00    //Page-0
+//w 30 40 00		//REG-64, DAC unmute
+//w 30 41 00		//REG-65, L-DAC_gain=0dB
+//w 30 42 00		//REG-66, R-DAC_gain=0dB  
+//w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                      
+
+B25,TTY_OUT_FULL  
+w 30 00 01
+w 30 09 3C
+w 30 10 00
+w 30 11 00
+w 30 0C 08
+w 30 0D 10
+w 30 00 00
+w 30 40 00
+w 30 41 00
+w 30 42 00
+w 30 3F D6
+w 30 40 00
+
+//w 30 00 01    //Page-1
+//w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only 
+//w 30 0D 10    //REG-13; L-DACM routed to HPR !! 
+//w 30 10 03		//HPL_Gain=3dB
+//w 30 11 03		//HPR_Gain=3dB
+//w 30 00 00    //Page-0
+//w 30 40 00		//REG-64, DAC unmute
+//w 30 41 00		//REG-65, L-DAC_gain=0dB
+//w 30 42 00		//REG-66, R-DAC_gain=0dB  
+//w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable                                                      
+
+B26,Muse  
+w 30 00 00
+
+B27,HAC  
+w 30 00 01    //Page-1     
+w 30 09 34		//Power up HP_PGA_gain_Ctrl; Powered up LOR_Gain_Ctrl Only
+w 30 0D 10    //REG-13; L-DACM routed to HPR !!   
+w 30 10 03		//HPL_Gain=3dB
+w 30 11 03		//HPR_Gain=3dB
+w 30 00 00    //Page-0     
+w 30 40 00		//REG-64; DAC unmute
+w 30 41 00		//REG-65, L-DAC_gain=0dB
+w 30 42 00		//REG-66, R-DAC_gain=0dB  
+w 30 3F D6		//REG-63, L-DAC, R-DAC powered up; L-DAC date source=L_date, R-DAC data source=R-DAC data; Soft_stepping_Ctrl disable
+
+B28,Low_Power_Mode_IMIC_Receiver  
+w 30 00 00
+
+B29,Downlink_Path_Off  
+w 30 00 00
+w 30 41 00  //0x41=65, LDAC gain:0dB
+w 30 42 00    //0x42=66, RDAC gain:0dB
+w 30 00 01
+w 30 10 40  //HPL mute, and gain = 0dB.
+w 30 11 40    //HPR mute, and gain = 0dB.
+
+B30,Downlink_Wakeup  
+w 30 00 01  //Wake up the codec                                                                
+w 30 01 08    //Disable weak connection of AVDD with DVDD                                        
+w 30 02 21    //Turn on the Analog block and PLL                                                 
+w 30 03 00    //Left DAC routing to HPL uses class-AB driver,Set Left DAC powertune mode into R4 
+w 30 04 00    //Right DAC routing to HPR uses class-AB driver,Set Righ DAC powertune mode into R4
+w 30 0C 08  //* LDAC-p router to HPL.
+w 30 0D 10  //* RDAC-m router to HPR.
+w 30 14 00  //0x14=20, soft step is disable
+w 30 00 00
+w 30 3F D6  //* 0x3F=63, open L/RDAC power, soft mute is disabled
+w 30 40 00  //DAC unmute
+w 30 51 C0  //* 0x51=81, L- R- ADC power up.
+w 30 00 01
+w 30 09 3F  //* HPL- R-, LOL- R-, MAL- R- power up.

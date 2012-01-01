@@ -1,0 +1,14 @@
+#!/system/bin/sh
+# 
+busybox mount -o rw,remount /system
+mkdir /sdcard/backups/extras
+mkdir /sdcard/backups/fonts
+mkdir /sdcard/backups/local
+busybox cp -R /system/app/LiveWallpapers.apk /sdcard/backups/extras
+busybox cp -R /system/fonts/DroidSans.ttf /sdcard/backups/fonts
+busybox cp -R /system/fonts/DroidSans-Bold.ttf /sdcard/backups/fonts
+busybox cp -R /system/fonts/Clockopia.ttf /sdcard/backups/fonts
+busybox cp -R /data/local/htc_bootanimation.zip /sdcard/backups/local
+busybox mount -o ro,remount /system
+sync
+
